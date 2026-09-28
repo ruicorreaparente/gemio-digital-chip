@@ -1,0 +1,13 @@
+﻿.git
+.gitignore
+**/build/
+**/*.o
+**/*.so
+**/*.a
+**/*.exe
+.vscode/
+.idea/
+docs/
+.DS_Store
+Thumbs.db
+*.log

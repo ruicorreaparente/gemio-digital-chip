@@ -1,42 +1,34 @@
 # Changelog
 
-## [Sprint 3] - 2026-10-02
+## [Sprint 4] - 2026-10-02
 
 ### Adicionado
-- SystemC 2.3.3 instalado via APT (libsystemc-dev)
-- QEMU RISC-V instalado via APT (qemu-system-misc)
-- CMakeLists.txt ajustado para encontrar SystemC via APT
-- GPIO em SystemC com interface TLM 2.0
-- Testbench com 5 testes automatizados
-- Makefile do SystemC
+- Toolchain RISC-V bare-metal (riscv64-unknown-elf-gcc)
+- Firmware em C (main.c) com acesso ao GPIO
+- Linker script para RISC-V (linker.ld)
+- Makefile do firmware
+- Bridge QEMU <-> SystemC com multiplas conexoes
+- Script Python de simulacao (bridge_sim.py)
 
 ### Validado
-- Compilacao sem erros
-- 5 testes passando:
-  * [PASS] Reset aplicado
-  * [PASS] Direcao configurada (0xFF)
-  * [PASS] Escrita DATA = 0xAA
-  * [PASS] Leitura DATA = 0xAA
-  * [PASS] Leitura entrada = 0x55
-- Saida final: [SUCESSO] GPIO validado!
+- Firmware compilado: firmware.elf (4828 bytes)
+- Firmware executa no QEMU sem erros
+- Bridge via socket Unix
+- Multiplas conexoes sequenciais
+- Escrita e leitura do GPIO via bridge
+- Co-simulacao HW/SW funcional
 
-### Correcoes
-- Removido socket TLM do GPIO (causava erro E109)
-- reset() nao escreve mais em sinais (erro E115)
-- main.cpp chama b_transport() diretamente
+## [Sprint 3] - 2026-10-02
 
-### Proximo Sprint
-- Sprint 4: Firmware bare-metal + co-simulacao completa
+### Validado
+- GPIO com 5 testes passando
 
 ## [Sprint 2] - 2026-10-02
 
 ### Adicionado
-- SystemC no Dockerfile
-- Modelo GPIO em SystemC com TLM 2.0
+- SystemC + Modelo GPIO com TLM 2.0
 
 ## [Sprint 1] - 2026-09-28
 
 ### Adicionado
-- Dockerfile base com Ubuntu 22.04 + GCC + Make + CMake
-- Exemplo Hello World em C++
-- Pipeline Docker validado
+- Dockerfile base + Hello World

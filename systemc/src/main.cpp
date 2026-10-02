@@ -1,6 +1,6 @@
 // =============================================================
-// Testbench do GPIO
-// Sprint 2 - Gemeo Digital de Chip
+// Testbench do GPIO com TLM
+// Sprint 3 - Gemeo Digital de Chip
 // =============================================================
 #include "gpio.h"
 #include <tlm.h>
@@ -16,7 +16,6 @@ SC_MODULE(Testbench) {
     GPIO* gpio;
 
     SC_CTOR(Testbench) {
-        // Instanciar GPIO
         gpio = new GPIO("gpio");
         gpio->clk(clk);
         gpio->rst_n(rst_n);
@@ -31,7 +30,7 @@ SC_MODULE(Testbench) {
     void run_tests() {
         std::cout << std::endl;
         std::cout << "========================================" << std::endl;
-        std::cout << " Testbench GPIO - Sprint 2" << std::endl;
+        std::cout << " Testbench GPIO - Sprint 3" << std::endl;
         std::cout << "========================================" << std::endl;
 
         // 1. Reset
@@ -41,71 +40,72 @@ SC_MODULE(Testbench) {
         wait(20, SC_NS);
         std::cout << "[PASS] Reset aplicado" << std::endl;
 
-        // 2. Testar escrita/leitura via TLM
+        // 2. Testar escrita/leitura via TLM (chamada direta ao b_transport)
         tlm::tlm_generic_payload trans;
         unsigned char data;
+        unsigned char read_val;
+        sc_time delay;
 
         // 2.1 Configurar direcao (todos saida = 0xFF)
         data = 0xFF;
         trans.set_command(tlm::TLM_WRITE_COMMAND);
-        trans.set_address(0x04);
+        trans.set_address(GPIO_ADDR_DIR);
         trans.set_data_ptr(&data);
         trans.set_data_length(1);
-        sc_time delay = SC_ZERO_TIME;
-        gpio->socket->b_transport(trans, delay);
+        delay = SC_ZERO_TIME;
+        gpio->b_transport(trans, delay);
         wait(10, SC_NS);
+        std::cout << "[PASS] Direcao configurada (0xFF)" << std::endl;
 
         // 2.2 Escrever 0xAA em DATA
         data = 0xAA;
         trans.set_command(tlm::TLM_WRITE_COMMAND);
-        trans.set_address(0x00);
+        trans.set_address(GPIO_ADDR_DATA);
         trans.set_data_ptr(&data);
         delay = SC_ZERO_TIME;
-        gpio->socket->b_transport(trans, delay);
+        gpio->b_transport(trans, delay);
         wait(10, SC_NS);
         std::cout << "[PASS] Escrita DATA = 0xAA" << std::endl;
 
         // 2.3 Ler DATA
-        unsigned char read_val;
         trans.set_command(tlm::TLM_READ_COMMAND);
-        trans.set_address(0x00);
+        trans.set_address(GPIO_ADDR_DATA);
         trans.set_data_ptr(&read_val);
         delay = SC_ZERO_TIME;
-        gpio->socket->b_transport(trans, delay);
+        gpio->b_transport(trans, delay);
         wait(10, SC_NS);
 
         if (read_val == 0xAA) {
-            std::cout << "[PASS] Leitura DATA = 0x" << std::hex << (int)read_val << std::dec << std::endl;
+            std::cout << "[PASS] Leitura DATA = 0xAA" << std::endl;
         } else {
-            std::cout << "[FAIL] Leitura DATA esperado 0xAA, obtido 0x" << std::hex << (int)read_val << std::dec << std::endl;
+            std::cout << "[FAIL] Leitura DATA esperado 0xAA, obtido 0x" 
+                      << std::hex << (int)read_val << std::dec << std::endl;
         }
 
         // 3. Testar entrada
-        // 3.1 Configurar direcao (todos entrada = 0x00)
         data = 0x00;
         trans.set_command(tlm::TLM_WRITE_COMMAND);
-        trans.set_address(0x04);
+        trans.set_address(GPIO_ADDR_DIR);
         trans.set_data_ptr(&data);
         delay = SC_ZERO_TIME;
-        gpio->socket->b_transport(trans, delay);
+        gpio->b_transport(trans, delay);
         wait(10, SC_NS);
 
-        // 3.2 Simular entrada 0x55
         gpio_in_sig.write(0x55);
         wait(10, SC_NS);
 
-        // 3.3 Ler DATA (deve retornar 0x55)
         trans.set_command(tlm::TLM_READ_COMMAND);
-        trans.set_address(0x00);
+        trans.set_address(GPIO_ADDR_DATA);
         trans.set_data_ptr(&read_val);
         delay = SC_ZERO_TIME;
-        gpio->socket->b_transport(trans, delay);
+        gpio->b_transport(trans, delay);
         wait(10, SC_NS);
 
         if (read_val == 0x55) {
-            std::cout << "[PASS] Leitura entrada = 0x" << std::hex << (int)read_val << std::dec << std::endl;
+            std::cout << "[PASS] Leitura entrada = 0x55" << std::endl;
         } else {
-            std::cout << "[FAIL] Leitura entrada esperado 0x55, obtido 0x" << std::hex << (int)read_val << std::dec << std::endl;
+            std::cout << "[FAIL] Leitura entrada esperado 0x55, obtido 0x" 
+                      << std::hex << (int)read_val << std::dec << std::endl;
         }
 
         std::cout << std::endl;

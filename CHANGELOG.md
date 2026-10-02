@@ -1,34 +1,42 @@
 # Changelog
 
-Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
+## [Sprint 3] - 2026-10-02
 
-O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
-e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
+### Adicionado
+- SystemC 2.3.3 instalado via APT (libsystemc-dev)
+- QEMU RISC-V instalado via APT (qemu-system-misc)
+- CMakeLists.txt ajustado para encontrar SystemC via APT
+- GPIO em SystemC com interface TLM 2.0
+- Testbench com 5 testes automatizados
+- Makefile do SystemC
+
+### Validado
+- Compilacao sem erros
+- 5 testes passando:
+  * [PASS] Reset aplicado
+  * [PASS] Direcao configurada (0xFF)
+  * [PASS] Escrita DATA = 0xAA
+  * [PASS] Leitura DATA = 0xAA
+  * [PASS] Leitura entrada = 0x55
+- Saida final: [SUCESSO] GPIO validado!
+
+### Correcoes
+- Removido socket TLM do GPIO (causava erro E109)
+- reset() nao escreve mais em sinais (erro E115)
+- main.cpp chama b_transport() diretamente
+
+### Proximo Sprint
+- Sprint 4: Firmware bare-metal + co-simulacao completa
+
+## [Sprint 2] - 2026-10-02
+
+### Adicionado
+- SystemC no Dockerfile
+- Modelo GPIO em SystemC com TLM 2.0
 
 ## [Sprint 1] - 2026-09-28
 
 ### Adicionado
-
-- Dockerfile base com Ubuntu 22.04
-- Ferramentas: GCC, G++, Make, CMake, Git
-- Usuário não-root developer (segurança)
-- Estrutura de pastas do projeto
+- Dockerfile base com Ubuntu 22.04 + GCC + Make + CMake
 - Exemplo Hello World em C++
-- Makefile com targets build/run/clean
-- Arquivo .dockerignore para otimizar build
-- Documentação inicial (README.md)
-
-### Validado
-
-- ✅ Docker Desktop funcionando (v29.8.0)
-- ✅ WSL2 + Ubuntu integrados
-- ✅ Build da imagem Docker bem-sucedido
-- ✅ Container executando corretamente
-- ✅ Compilação C++ dentro do container
-- ✅ Pipeline end-to-end validado
-
-### Próximo Sprint
-
-- Sprint 2: Adicionar SystemC 3.0.2 ao Dockerfile
-- Sprint 2: Implementar modelo GPIO em SystemC
-- Sprint 2: Testes unitários do GPIO
+- Pipeline Docker validado

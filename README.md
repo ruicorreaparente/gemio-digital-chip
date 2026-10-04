@@ -1,121 +1,64 @@
-# Gêmeo Digital de Chip
+# Gemeo Digital de Chip
 
-## Integração Hardware/Software com SystemC e QEMU
+Plataforma de co-simulacao HW/SW com SystemC e QEMU para validacao pre-silicon.
 
-**Autor:** Rui Correa Parente (Eng. RTL Certificado Synopsys)
+## Sobre o Projeto
 
----
+O Gemeo Digital de Chip e uma plataforma open-source que permite testar firmware antes do tape-out, reduzindo custos e acelerando o time-to-market.
 
-## 📋 Status do Projeto
+### O Problema
 
-| Sprint | Descrição | Status |
+Times de hardware (RTL) e software (firmware) trabalham em silos isolados. O software so pode ser testado apos o retorno do chip fisico (6 a 12 meses).
+
+### A Solucao
+
+Um ambiente de co-simulacao onde o firmware roda sobre um modelo de hardware, permitindo testes desde o primeiro dia do projeto.
+
+## Arquitetura
+
+Firmware (C) - QEMU (RISC-V) - Bridge (socket Unix) - GPIO (SystemC)
+
+## Tecnologias
+
+| Tecnologia | Versao | Uso |
+|------------|--------|-----|
+| Docker | 29.8.1 | Ambiente reproduzivel |
+| SystemC | 2.3.3 | Modelagem de hardware |
+| QEMU | 8.2.0 | Emulacao RISC-V |
+| RISC-V GCC | 10.2.0 | Toolchain bare-metal |
+| CMake | 3.16+ | Build system |
+
+## Resultados Validados
+
+### Testes do GPIO - Sprint 3
+
+5 testes passaram: Reset, Direcao, Escrita DATA=0xAA, Leitura DATA=0xAA, Leitura entrada=0x55.
+
+### Co-simulacao - Sprint 4
+
+Bridge via socket Unix processou comandos de escrita e leitura do GPIO com sucesso.
+
+## Roadmap
+
+| Sprint | Descricao | Status |
 |--------|-----------|--------|
-| **Sprint 1** | Docker + Toolchain mínima | ✅ **CONCLUÍDO** |
-| Sprint 2 | SystemC + Modelo GPIO | ⏳ Próximo |
-| Sprint 3 | Bridge TLM 2.0 + QEMU | ⏳ Pendente |
-| Sprint 4 | Firmware bare-metal + Co-simulação | ⏳ Pendente |
+| Sprint 1 | Docker + Toolchain | Concluido |
+| Sprint 2 | SystemC + GPIO | Concluido |
+| Sprint 3 | GPIO Validado | Concluido |
+| Sprint 4 | Co-simulacao HW/SW | Concluido |
+| Sprint 5 | QEMU real com device model | Planejado |
+| Sprint 6 | Interface Web | Planejado |
 
----
+## Licenca
 
-## 🎯 Sobre o Projeto
+Este projeto esta sob a licenca MIT. Veja o arquivo LICENSE.
 
-Este projeto implementa um ambiente de co-simulação para teste de integração hardware-software, utilizando:
+## Autor
 
-- **SystemC/TLM 2.0** para modelagem de hardware em alto nível
-- **QEMU** para emulação do processador RISC-V
-- **Bridge de comunicação** via sockets Unix
-- **Firmware bare-metal** em C
+Rui Correa Parente
 
-O objetivo é permitir que testes de firmware comecem **antes do tape-out**, reduzindo custos e acelerando o desenvolvimento.
-
----
-
-## 🏗️ Estrutura do Projeto
-
-\\\
-gemio-digital-chip/
-├── docker/                 # Dockerfile e scripts de container
-│   └── Dockerfile
-├── examples/               # Exemplos de código
-│   └── hello/
-│       ├── hello.cpp
-│       └── Makefile
-├── scripts/                # Scripts de automação
-├── docs/                   # Documentação
-├── .dockerignore
-└── README.md
-\\\
-
----
-
-## 🚀 Como Executar
-
-### Pré-requisitos
-
-- Docker Desktop (v29+)
-- WSL2 (Windows Subsystem for Linux)
-- Git
-
-### Passo 1: Construir a imagem Docker
-
-\\\powershell
-cd D:\dev\gemio-digital-chip
-docker build -t gemio-digital-chip:sprint1 -f docker/Dockerfile .
-\\\
-
-### Passo 2: Executar o container
-
-\\\powershell
-docker run --rm -it -v \D:\dev\gemio-digital-chip:/workspace gemio-digital-chip:sprint1
-\\\
-
-### Passo 3: Executar o exemplo
-
-Dentro do container:
-
-\\\ash
-cd examples/hello
-make run
-\\\
-
----
-
-## ✅ Sprint 1 - Concluído
-
-### O que foi validado
-
-- [x] Docker Desktop instalado (v29.8.0)
-- [x] WSL2 + Ubuntu configurados
-- [x] Estrutura de pastas criada
-- [x] Dockerfile mínimo funcional
-- [x] Imagem Docker construída com sucesso
-- [x] Container executando
-- [x] GCC compilando dentro do container
-- [x] Make automatizando o build
-- [x] Pipeline validado end-to-end
-
-### Saída esperada do Sprint 1
-
-\\\
-==========================================
-  Gemeo Digital de Chip - Sprint 1
-==========================================
-  [OK] Docker funcionando!
-  [OK] GCC compilando!
-  [OK] Ambiente EDA pronto para o Sprint 2!
-
-[SUCESSO] Pipeline validado!
-\\\
-
----
-
-## 📞 Contato
-
-**Rui Correa Parente**
-- E-mail: ruicorreaparente@gmail.com
-- Celular: (41) 98809-0502
+- Engenheiro RTL Certificado Synopsys
+- Aluno Bolsista do Curso Especialista em Microeletronica - UFRGS
+- Email: ruicorreaparente@gmail.com
 - LinkedIn: https://www.linkedin.com/in/rcpanalistadedados/
-
----
-
-*Documento assinado digitalmente - Verifique em https://validar.iti.gov.br*
+- Website: https://ciexpert.softex.br

@@ -62,3 +62,8 @@ Rui Correa Parente
 - Email: ruicorreaparente@gmail.com
 - LinkedIn: https://www.linkedin.com/in/rcpanalistadedados/
 - Website: https://ciexpert.softex.br
+
+## Desenvolvimento com IA Agentica
+
+Este projeto utiliza o [DIO Agent](https://github.com/digitalinnovationone/dio-agent) como mentor de aprendizado em tecnologia, integrado ao Cursor IDE.
+

@@ -1,5 +1,5 @@
 OUTPUT_ARCH(riscv)
-ENTRY(main)
+ENTRY(_start)
 
 MEMORY
 {
@@ -9,6 +9,7 @@ MEMORY
 SECTIONS
 {
     .text : {
+        *(.text.start)
         *(.text)
         *(.text.*)
     } > RAM
@@ -28,7 +29,7 @@ SECTIONS
         *(.bss.*)
     } > RAM
 
-    . = ALIGN(8);
-    . = . + 0x1000;
+    . = ALIGN(16);
+    . = . + 0x4000;
     _stack_top = .;
 }

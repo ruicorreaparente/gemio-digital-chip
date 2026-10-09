@@ -8,18 +8,17 @@ QEMU ?= qemu-system-riscv64
 all: build
 
 build:
-	@mkdir -p $(BUILD_DIR)
-	$(CC) -march=rv32i -mabi=ilp32 -nostdlib -nostartfiles -T src/linker.ld -o $(BUILD_DIR)/firmware.elf src/main.c
-	@echo 'Firmware compilado: $(BUILD_DIR)/firmware.elf'
+@mkdir -p $(BUILD_DIR)
+$(CC) -march=rv32i -mabi=ilp32 -nostdlib -nostartfiles -T src/linker.ld -o $(BUILD_DIR)/firmware.elf src/main.c
+@echo 'Firmware compilado: $(BUILD_DIR)/firmware.elf'
 
 m1:
-	@mkdir -p $(BUILD_DIR)
-	$(CC) -march=rv64imac -mabi=lp64 -nostdlib -nostartfiles -T src/linker.ld \
-		-o $(BUILD_DIR)/firmware_m1.elf src/main_m1.c
-	@echo 'Firmware M1 compilado: $(BUILD_DIR)/firmware_m1.elf'
+@mkdir -p $(BUILD_DIR)
+$(CC) -march=rv64imac -mabi=lp64 -mcmodel=medany -nostdlib -nostartfiles -T src/linker.ld -o $(BUILD_DIR)/firmware_m1.elf src/startup.S src/main_m1.c
+@echo 'Firmware M1 compilado: $(BUILD_DIR)/firmware_m1.elf'
 
 run-m1: m1
-	$(QEMU) -M virt -nographic -bios none -kernel $(BUILD_DIR)/firmware_m1.elf
+$(QEMU) -M virt -nographic -bios none -kernel $(BUILD_DIR)/firmware_m1.elf
 
 clean:
-	@rm -rf $(BUILD_DIR)
+@rm -rf $(BUILD_DIR)

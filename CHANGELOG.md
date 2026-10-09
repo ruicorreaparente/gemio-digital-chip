@@ -32,3 +32,16 @@
 
 ### Adicionado
 - Dockerfile base + Hello World
+## [Sprint 5 - M1] - 2026-10-08
+
+### Marco M1: Device MMIO QEMU validado
+
+- QEMU 8.2 compilado do fonte com device customizado
+- Device gemio-gpio integrado em 0x10010000
+- Firmware M1 compilado com startup.S (stack pointer)
+- Teste final: WR DIR=0xff, WR DATA=0xaa, RD -> 0xaa, OK
+
+### Correcoes
+- -mcmodel=medany para resolver relocation truncada
+- startup.S inicializando stack pointer (_stack_top)
+- linker.ld com ENTRY(_start) e .text.start

@@ -1,0 +1,53 @@
+#ifndef DTWIN_IPC_PROTOCOL_H
+#define DTWIN_IPC_PROTOCOL_H
+
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#define DTWIN_PROTO_MAGIC       0x45444131U
+#define DTWIN_PROTO_VERSION     0x00010000U
+#define DTWIN_DEFAULT_SOCK_PATH "/tmp/ipc/dtwin_gpio.sock"
+
+typedef enum {
+    DTWIN_CMD_HANDSHAKE = 0x01,
+    DTWIN_CMD_READ      = 0x02,
+    DTWIN_CMD_WRITE     = 0x03,
+    DTWIN_CMD_RESET     = 0x04,
+    DTWIN_CMD_IRQ_ACK   = 0x05
+} dtwin_cmd_t;
+
+typedef enum {
+    DTWIN_STATUS_OK             = 0x00,
+    DTWIN_STATUS_ERR_ALIGNMENT  = 0x01,
+    DTWIN_STATUS_ERR_DECODE     = 0x02,
+    DTWIN_STATUS_ERR_TIMEOUT    = 0x03,
+    DTWIN_STATUS_ERR_INTERNAL   = 0xFF
+} dtwin_status_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t magic;
+    uint32_t seq_id;
+    uint8_t  cmd;
+    uint8_t  size;
+    uint16_t reserved;
+    uint64_t addr;
+    uint64_t data;
+} dtwin_req_packet_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t magic;
+    uint32_t seq_id;
+    uint8_t  status;
+    uint8_t  size;
+    uint16_t flags;
+    uint64_t data;
+} dtwin_resp_packet_t;
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif
